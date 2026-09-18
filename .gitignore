@@ -1,0 +1,32 @@
+# competition data (download via Kaggle API / competition page, not versioned)
+data/
+
+# local scratch space (plans, translated docs, experiments not meant for review)
+local_files/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# jupyter
+.ipynb_checkpoints/
+
+# ML artifacts
+mlruns/
+outputs/
+*.ckpt
+*.pt
+*.pth
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# secrets
+.env
