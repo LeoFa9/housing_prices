@@ -18,6 +18,7 @@ env/
 # ML artifacts
 mlruns/
 outputs/
+catboost_info/
 *.ckpt
 *.pt
 *.pth
