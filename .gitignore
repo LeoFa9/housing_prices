@@ -31,6 +31,7 @@ catboost_info/
 Thumbs.db
 .vscode/
 .idea/
+.claude/
 
 # secrets
 .env

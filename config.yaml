@@ -1,0 +1,146 @@
+# Какую модель или ансамбль запускать: любой ключ из models или ensembles ниже,
+# либо all - прогонит по CV все модели и ансамбли разом и напечатает сравнительную таблицу, без сабмита
+model: averaging_5_models
+
+data:
+  train_path: data/train.csv
+  test_path: data/test.csv
+  submission_dir: submissions
+
+validation:
+  n_splits: 5
+  random_state: 42
+
+# Базовые модели с гиперпараметрами из optuna_tuning.ipynb, classical_models.ipynb и dnn.ipynb
+# scale - стандартизация числовых признаков, dense - плотный one-hot вместо разреженного
+models:
+  lasso:
+    scale: true
+    dense: false
+    params:
+      alpha: 0.0005078929047587406
+      max_iter: 20000
+
+  ridge:
+    scale: true
+    dense: false
+    params:
+      alpha: 12.521885136283695
+
+  elasticnet:
+    scale: true
+    dense: false
+    params:
+      alpha: 0.0009008366097856419
+      l1_ratio: 0.5103587059088599
+      max_iter: 20000
+
+  random_forest:
+    scale: false
+    dense: false
+    params:
+      n_estimators: 118
+      criterion: poisson
+      max_depth: 23
+      min_samples_split: 4
+      min_samples_leaf: 1
+      max_features: 0.45997403291690353
+      max_samples: 0.9111748662471574
+      random_state: 42
+      n_jobs: -1
+
+  xgboost:
+    scale: false
+    dense: false
+    params:
+      booster: gbtree
+      n_estimators: 990
+      max_depth: 3
+      learning_rate: 0.05847892915316512
+      min_child_weight: 0.637689473011825
+      subsample: 0.9029473470866576
+      colsample_bytree: 0.4607459901880062
+      gamma: 8.285973574448373e-08
+      reg_alpha: 4.032976287219069e-07
+      reg_lambda: 3.6499272926641786
+      random_state: 42
+      verbosity: 0
+
+  lightgbm:
+    scale: false
+    dense: false
+    params:
+      boosting_type: gbdt
+      num_leaves: 135
+      max_depth: 4
+      learning_rate: 0.014191639087470571
+      n_estimators: 1310
+      min_child_samples: 4
+      subsample: 0.8155726506796872
+      subsample_freq: 5
+      colsample_bytree: 0.43429044707904246
+      reg_alpha: 0.0005811844267242152
+      reg_lambda: 0.013591235587074845
+      min_split_gain: 0.0012512344321506698
+      random_state: 42
+      verbose: -1
+
+  catboost:
+    scale: false
+    dense: false
+    params:
+      iterations: 300
+      learning_rate: 0.1
+      depth: 4
+      l2_leaf_reg: 3
+      random_strength: 0
+      bagging_temperature: 2
+      rsm: 0.7
+      min_data_in_leaf: 10
+      random_state: 42
+      verbose: false
+      thread_count: 2
+      allow_writing_files: false
+
+  dnn:
+    scale: true
+    dense: true
+    params:
+      hidden_dim: 64
+      dropout: 0.3
+      lr: 0.01
+      batch_size: 32
+      n_epochs: 400
+      random_state: 42
+
+# Мета-модели для stacking, alphas_logspace - три числа для np.logspace
+final_estimators:
+  linear_regression:
+    params: {}
+
+  ridge_cv:
+    params:
+      alphas_logspace: [-3, 3, 13]
+
+# Ансамбли из ensembles.ipynb, случайный лес в них не входит, он слабее остальных
+# и мешает простому усреднению
+ensembles:
+  averaging_5_models:
+    type: averaging
+    base_models: [lasso, xgboost, lightgbm, catboost, dnn]
+
+  averaging_4_models:
+    type: averaging
+    base_models: [lasso, xgboost, lightgbm, catboost]
+
+  stacking_ridge_5_models:
+    type: stacking
+    final_estimator: ridge_cv
+    cv: 3
+    base_models: [lasso, xgboost, lightgbm, catboost, dnn]
+
+  stacking_ridge_4_models:
+    type: stacking
+    final_estimator: ridge_cv
+    cv: 3
+    base_models: [lasso, xgboost, lightgbm, catboost]
