@@ -4,6 +4,9 @@ data/
 # local scratch space (plans, translated docs, experiments not meant for review)
 local_files/
 
+# generated submission files
+submissions/
+
 # python
 __pycache__/
 *.py[cod]
