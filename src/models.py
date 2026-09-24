@@ -8,8 +8,8 @@ from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline, make_pipeline
 from xgboost import XGBRegressor
 
-from dnn import NeuralNetRegressor
-from preprocessing import build_preprocessor
+from src.dnn import NeuralNetRegressor
+from src.preprocessing import build_preprocessor
 
 MODEL_CLASSES = {
     "lasso": Lasso,

@@ -1,6 +1,9 @@
 import subprocess
 import sys
 import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
 
 NOTEBOOKS = [
     "notebooks/eda_and_hypotheses.ipynb",
@@ -14,11 +17,12 @@ NOTEBOOKS = [
 
 
 def run_notebook(path: str) -> bool:
-    """Выполняет один ноутбук на месте тем же интерпретатором, что запустил скрипт"""
+    """Выполняет один ноутбук из корня репозитория на месте тем же интерпретатором, что запустил скрипт"""
     result = subprocess.run(
         [sys.executable, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute", "--inplace", path],
         capture_output=True,
         text=True,
+        cwd=ROOT,
     )
     if result.returncode != 0:
         print(result.stderr[-3000:])

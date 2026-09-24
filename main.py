@@ -4,9 +4,9 @@ from pathlib import Path
 import pandas as pd
 from omegaconf import DictConfig, OmegaConf
 
-from models import build_model
-from preprocessing import load_features
-from validation import cross_validate_model, fit_and_predict
+from src.models import build_model
+from src.preprocessing import load_features
+from src.validation import cross_validate_model, fit_and_predict
 
 
 def evaluate_all(cfg: DictConfig, X_train: pd.DataFrame, y_train: pd.Series) -> None:
